@@ -29,4 +29,4 @@ SELECT TOP (1000) [Continent]
       ,[Storage_Capacity]
   FROM [PC_Sales].[dbo].[Laptop_Sales]
 
-  select
+
