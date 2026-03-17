@@ -73,12 +73,32 @@ FROM [PC_Sales].[dbo].[Laptop_Sales]
 
 
 -- 15. Find total revenue per PC Make.
-SELECT 
--- 16. Find average Sale Price per Storage Type.
+SELECT PC_Make, Sum(Sale_Price) AS Total_Revenue
+FROM [PC_Sales].[dbo].[Laptop_Sales]
+GROUP BY PC_Make
+
+-- 16. Find average Sale Price per Storage Type. 
+SELECT Storage_Type , AVG(Sale_Price) AS Sale_Per_StorageType
+FROM [PC_Sales].[dbo].[Laptop_Sales]
+GROUP BY Storage_Type
+
 -- 17. Calculate total revenue per Shop Name.
+SELECT Shop_Name, SUM(Sale_Price) AS Total_PersonName
+FROM [PC_Sales].[dbo].[Laptop_Sales]
+GROUP BY Sales_Person_Name
+
+
 -- 18. Calculate total revenue per Sales Person Name.
+
+
+
 -- 19. Find average Credit Score per Payment Method.
+SELECT Payment_Method, AVG(Credit_Score) AS Average_Score_Payment_Method
+FROM [PC_Sales].[dbo].[Laptop_Sales]
+GROUP BY Payment_Method
+
 -- 20. Calculate total Cost of Repairs per Sales Person Department.
+
 
 -- ADVANCED QUESTIONS
 
@@ -90,8 +110,12 @@ SELECT
 
 
 -- 22. Calculate profit margin per sale ((Sale Price - Cost Price) / Sale Price).
-       select sum(CAST((Sale_Price - Cost_Price) / (Sale_Price) as INT)) as Profit
-       FROM [PC_Sales].[dbo].[Laptop_Sales]
+      SELECT Pc_Make, SUM(Sale_Price) AS Revenue,
+      SUM(Sale_Price) * 100.0 / SUM(SUM(Sale_Price)) 
+      OVER () AS Revenue_Percentage 
+      FROM [PC_Sales].[dbo].[Laptop_Sales]
+      GROUP BY Pc_Make 
+      ORDER BY Revenue
 
 
 -- 23. Determine which Continent has the highest total revenue.
@@ -137,9 +161,9 @@ FROM [PC_Sales].[dbo].[Laptop_Sales]
 WHERE Sale_Price < PC_Market_Price
 
 -- 30. Rank Sales Person Name by Total Sales per Employee using a window function.
-SELECT Sales_Person_Name, sum(Sale_Price) AS  Total_Sales_Person_Employee ,
+SELECT Sales_Person_Name, Total_Sales_per_Employee ,
 --ROW_NUMBER () OVER(ORDER BY Sum(Sale_Price)) AS Sale_row_number,
-RANK () OVER(ORDER BY SUM(Sale_Price)) AS Overall_rank
+RANK () OVER(ORDER BY Total_Sales_per_Employee
 FROM [PC_Sales].[dbo].[Laptop_Sales]
 GROUP BY Sales_Person_Name
 
